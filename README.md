@@ -4,10 +4,10 @@
 
 ## Installation
 
-To install the Go Client for Google Maps Services, please execute the following `go get` command.
+To install the Go Client for Eventbrite API, please execute the following `go get` command.
 
 ```bash
-    go get googlemaps.github.io/maps
+go get github.com/apzuk/go-eventbrite
 ```
 
 ## Developer Documentation

@@ -7,19 +7,14 @@ import (
 
 // https://www.eventbrite.com/developer/v3/resources/uploads/
 type Media struct {
-
 	// the method (always POST)
 	Method string `json:"upload_method"`
-
 	// oauth token
 	Token string `json:"upload_token"`
-
 	// the URL that should be uploaded to
 	Url string `json:"url"`
-
 	// the POST data that should be included in the POST that uploads the file
 	UploadData UploadData `json:"upload_data"`
-
 	// Specifies the POST field that the file itself should be included in (handled using HTTP multipart upload)
 	FileParameterName string `json:"file_parameter_name"`
 }

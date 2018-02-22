@@ -1,6 +1,7 @@
 package eventbrite
 
 import (
+	"fmt"
 	"time"
 	"net/http"
 	"net/url"
@@ -12,8 +13,8 @@ import (
 
 	"golang.org/x/net/context"
 	"golang.org/x/net/context/ctxhttp"
-	"fmt"
 	"gopkg.in/go-playground/validator.v9"
+	"gopkg.in/go-playground/validator.v8"
 )
 
 var (

@@ -29,20 +29,15 @@ type UpdateOrganizerRequest struct {
 }
 
 type OrganizerEventsRequest struct {
-
 	// Only return events with a specific status set. This should be a comma delimited string of status.
 	// Valid status: all, draft, live, canceled, started, ended.
 	Status string `json:"status"`
-
 	// How to order the results (Valid choices are: start_asc, start_desc, created_asc, or created_desc)
 	OrderBy string `json:"order_by"`
-
 	// Only return events with start dates after the given date
 	StartDateRangeStart string `json:"start_date.range_start"`
-
 	// Only return events with start dates after the given date
 	StartDateRangeEnd string `json:"start_date.range_end"`
-
 	// Only show public events even if viewing your own events.
 	PublicOnly bool `json:"only_public"`
 }

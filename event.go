@@ -366,6 +366,7 @@ type EventUpdateTicketClass struct {
 }
 
 // EventDeleteTicketClass is the request structure to delkete an Event TicketClass
+//
 // https://www.eventbrite.com/developer/v3/endpoints/events/#ebapi-id29
 type EventDeleteTicketClass struct {
     // Delete even if ticket sales depend on this ticket. This will start ticket sales of
@@ -374,6 +375,7 @@ type EventDeleteTicketClass struct {
 }
 
 // EventGetCannedQuestions is the request structure to get Event canned questions
+//
 // https://www.eventbrite.com/developer/v3/endpoints/events/#ebapi-id31
 type EventGetCannedQuestions struct {
     // Return private events and more details
@@ -408,6 +410,7 @@ type EventCreateCannedQuestion struct {
 }
 
 // EventGetQuestions is the request structure to get an Event questions
+//
 // https://www.eventbrite.com/developer/v3/endpoints/events/#ebapi-id35
 type EventGetQuestions struct {
 	// Return private events and more details

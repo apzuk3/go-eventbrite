@@ -10,7 +10,7 @@ type FormatResult struct {
 	Formats []Format
 }
 
-// A type of event presentation - e.g. “seminar”, “workshop”, “concert”. Separate from
+// Format is a type of event presentation - e.g. “seminar”, “workshop”, “concert”. Separate from
 // category as you can have a “music concert” or a “music seminar”.
 //
 // https://www.eventbrite.com/developer/v3/response_formats/event/#ebapi-format

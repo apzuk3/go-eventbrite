@@ -19,19 +19,15 @@ type WebhooksResult struct {
 
 // https://www.eventbrite.com/developer/v3/endpoints/webhooks/#ebapi-id5
 type CreateWebhookRequest struct {
-
 	// The target URL of the Webhook subscription
 	EndpointUrl string `json:"endpoint_url"`
-
-	// Determines what actions will trigger the webhook. If no value is sent for this param, it selects
+    // Determines what actions will trigger the webhook. If no value is sent for this param, it selects
 	// order.placed, event.published, and event.unpublished by default. See below for a more complete
 	// description of all available actions
 	Actions string `json:"actions"`
-
-	// The organization under which the webhook management is scoped
+    // The organization under which the webhook management is scoped
 	OrganizationID string `json:"organization_id"`
-
-	// The ID of the event that triggers this webhook. Leave blank for all events
+    // The ID of the event that triggers this webhook. Leave blank for all events
 	EventID string `json:"event_id"`
 }
 

@@ -8,7 +8,7 @@ type NotificationsResult struct {
 	Pagination Pagination
 }
 
-// This is the representation of something that Eventbrite has notified to its users.
+// Notification is the representation of something that Eventbrite has notified to its users.
 //
 // see @https://www.eventbrite.com/developer/v3/response_formats/notification/#ebapi-std:format-notification
 type Notification struct {
@@ -31,7 +31,7 @@ type Notification struct {
 	ImageId Image `json:"image_id"`
 }
 
-// Gets a paginated response of notification objects for a determined user.
+// Notifications gets a paginated response of notification objects for a determined user.
 //
 // https://www.eventbrite.com/developer/v3/endpoints/notifications/#ebapi-get-users-me-notifications
 func (c *Client) Notifications(ctx context.Context) (*NotificationsResult, error) {

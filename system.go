@@ -20,7 +20,7 @@ type Countries struct {
 	Pagination Pagination `json:"pagination"`
 }
 
-// Returns a paginated response with a key of timezones, containing a list of timezones
+// Timezones returns a paginated response with a key of timezones, containing a list of timezones
 //
 // https://www.eventbrite.com/developer/v3/endpoints/system/#ebapi-get-system-timezones
 func (c *Client) Timezones(ctx context.Context) (*Timezones, error) {
@@ -29,7 +29,7 @@ func (c *Client) Timezones(ctx context.Context) (*Timezones, error) {
 	return res, c.getJSON(ctx, "/system/timezones/", nil, res)
 }
 
-// Returns a single page response with a key of regions, containing a list of regions
+// Timezones returns a single page response with a key of regions, containing a list of regions
 //
 // https://www.eventbrite.com/developer/v3/endpoints/system/#ebapi-get-system-regions
 func (c *Client) Regions(ctx context.Context) (*Regions, error) {
@@ -38,7 +38,7 @@ func (c *Client) Regions(ctx context.Context) (*Regions, error) {
 	return res, c.getJSON(ctx, "/system/regions/", nil, res)
 }
 
-// Returns a single page response with a key of countries, containing a list of countries
+// Timezones returns a single page response with a key of countries, containing a list of countries
 //
 // https://www.eventbrite.com/developer/v3/endpoints/system/#ebapi-get-system-countries
 func (c *Client) Countries(ctx context.Context) (*Countries, error) {

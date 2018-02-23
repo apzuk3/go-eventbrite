@@ -501,6 +501,7 @@ type EventGetTicketGroupsTicketClasses struct {
 }
 
 // EventSearchResult is the response structure for Event search
+//
 // https://www.eventbrite.com/developer/v3/endpoints/events/#ebapi-events
 type EventSearchResult struct {
     Pagination Pagination `json:"pagination"`
@@ -516,7 +517,7 @@ type EventGetTicketClassResult struct {
 }
 
 // EventSearch allows you to retrieve a paginated response of public event objects from across
-// Eventbrite’s directory, regardless of which user owns the event.\
+// Eventbrite’s directory, regardless of which user owns the event.
 //
 // https://www.eventbrite.com/developer/v3/endpoints/events/#ebapi-events
 func (c *Client) EventSearch(ctx context.Context, req *EventSearchRequest) (*EventSearchResult, error) {

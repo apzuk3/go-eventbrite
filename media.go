@@ -30,28 +30,21 @@ type UploadData struct {
 
 // https://www.eventbrite.com/developer/v3/endpoints/media/#ebapi-id1
 type MediaGetUpload struct {
-
 	// The type of image to upload (Valid choices are: image-event-logo, image-event-logo-preserve-quality,
 	// image-event-view-from-seat, image-organizer-logo, image-user-photo, or image-structured-content)
-
 	Type string `json:"type" validate:"required"`
 }
 
 // https://www.eventbrite.com/developer/v3/endpoints/media/#ebapi-id3
 type MediaCreateUpload struct {
-
 	// The upload_token from the GET portion of the upload
 	UploadToken string `json:"upload_token" validate:"required"`
-
 	// X coordinate for top-left corner of crop mask
 	TopLeftX int `json:"crop_mask.top_left.x"`
-
 	// Y coordinate for top-left corner of crop mask
 	TopLeftY int `json:"crop_mask.top_left.y"`
-
 	// Crop mask width
 	Width int `json:"crop_mask.width"`
-
 	// Crop mask height
 	Height int `json:"crop_mask.height"`
 }

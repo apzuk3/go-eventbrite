@@ -6,28 +6,53 @@ import (
 	"golang.org/x/net/context"
 )
 
+// CreateOrganizerRequest is the request structure for creating a new organizer
+//
+// https://www.eventbrite.co.uk/developer/v3/endpoints/organizers/#ebapi-parameters
 type CreateOrganizerRequest struct {
+	// The name of the organizer
 	Name string `json:"organizer.name" validate:"required"`
+	// The description of the organizer
 	Description string `json:"organizer.description.html"`
+	// The long description of the organizer
 	LongDescription string `json:"organizer.long_description.html"`
-	LogoId string `json:"organizer.logo.id"`
+	// The logo id of the organizer
+	LogoID string `json:"organizer.logo.id"`
+	// The website for the organizer
 	Website string `json:"organizer.website"`
+	// The Twitter handle for the organizer
 	Twitter string `json:"organizer.twitter"`
+	// The Facebook URL ID for the organizer
 	Facebook string `json:"organizer.facebook"`
+	// The Instagram numeric ID for the organizer
 	Instagram string `json:"organizer.instagram"`
 }
 
+// UpdateOrganizerRequest is the request structure for updating an organizer
+//
+// https://www.eventbrite.co.uk/developer/v3/endpoints/organizers/#ebapi-id3
 type UpdateOrganizerRequest struct {
+	// The name of the organizer
 	Name string `json:"organizer.name"`
+	// The description of the organizer
 	Description string `json:"organizer.description.html"`
+	// The long description of the organizer
 	LongDescription string `json:"organizer.long_description.html"`
+	// The logo id of the organizer
 	LogoId string `json:"organizer.logo.id"`
+	// The website for the organizer
 	Website string `json:"organizer.website"`
+	// The Twitter handle for the organizer
 	Twitter string `json:"organizer.twitter"`
+	// The Facebook URL ID for the organizer
 	Facebook string `json:"organizer.facebook"`
+	// The Instagram numeric ID for the organizer
 	Instagram string `json:"organizer.instagram"`
 }
 
+// OrganizerEventsRequest is the request structure to get organizer events
+//
+// https://www.eventbrite.co.uk/developer/v3/endpoints/organizers/#ebapi-id6
 type OrganizerEventsRequest struct {
 	// Only return events with a specific status set. This should be a comma delimited string of status.
 	// Valid status: all, draft, live, canceled, started, ended.
@@ -42,12 +67,15 @@ type OrganizerEventsRequest struct {
 	PublicOnly bool `json:"only_public"`
 }
 
+// OrganizerEventsResult is the response structure for organizer events request
+//
+// https://www.eventbrite.co.uk/developer/v3/endpoints/organizers/#ebapi-get-organizers-id-events
 type OrganizerEventsResult struct {
 	Events []Event `json:"events"`
 	Pagination Pagination `json:"pagination"`
 }
 
-// Makes a new organizer. Returns the organizer
+// OrganizerCreate makes a new organizer. Returns the organizer
 //
 // https://www.eventbrite.com/developer/v3/endpoints/organizers/#ebapi-post-organizers
 func (c *Client) OrganizerCreate(ctx context.Context, req *CreateOrganizerRequest) (*Organizer, error) {
@@ -56,7 +84,7 @@ func (c *Client) OrganizerCreate(ctx context.Context, req *CreateOrganizerReques
 	return resp, c.postJSON(ctx, "/organizers/", req, resp)
 }
 
-// Gets an organizer by ID as organizer.
+// OrganizerCreate gets an organizer by ID as organizer.
 //
 // https://www.eventbrite.com/developer/v3/endpoints/organizers/#ebapi-get-organizers-id
 func (c *Client) OrganizerGet(ctx context.Context, id string) (*Organizer, error) {
@@ -65,7 +93,7 @@ func (c *Client) OrganizerGet(ctx context.Context, id string) (*Organizer, error
 	return resp, c.postJSON(ctx, "/organizers/" + id, nil, resp)
 }
 
-// Updates an organizer and returns it as as organizer.
+// OrganizerCreate updates an organizer and returns it as as organizer.
 //
 // https://www.eventbrite.com/developer/v3/endpoints/organizers/#ebapi-post-organizers
 func (c *Client) OrganizerUpdate(ctx context.Context, id string, req *UpdateOrganizerRequest) (*Organizer, error) {
@@ -74,7 +102,7 @@ func (c *Client) OrganizerUpdate(ctx context.Context, id string, req *UpdateOrga
 	return resp, c.postJSON(ctx, "/organizers/" + id, req, resp)
 }
 
-// Gets events of the organizer.
+// OrganizerCreate gets events of the organizer.
 //
 // https://www.eventbrite.com/developer/v3/endpoints/organizers/#ebapi-get-organizers-id-events
 func (c *Client) OrganizerGetEvents(ctx context.Context, id string, req *OrganizerEventsRequest) (*OrganizerEventsResult, error) {

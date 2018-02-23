@@ -8,81 +8,57 @@ import (
 
 // https://www.eventbrite.com/developer/v3/endpoints/venues/#ebapi-id1
 type UpdateVenueRequest struct {
-
 	// The name of the venue
 	Name string `json:"venue.name"`
-
-	// The organizer this venue belongs to (optional - leave this off to use the default organizer)
+    // The organizer this venue belongs to (optional - leave this off to use the default organizer)
 	OrganizerID string `json:"venue.organizer_id"`
-
-	// The first line of the address
+    // The first line of the address
 	Address1 string `json:"venue.address.address_1"`
-
-	// The second line of the address
+    // The second line of the address
 	Address2 string `json:"venue.address.address_2"`
-
-	// The city where the venue is
+    // The city where the venue is
 	City string `json:"venue.address.city"`
-
-	// The region where the venue is
+    // The region where the venue is
 	Region string `json:"venue.address.region"`
-
-	// The postal_code where the venue is
+    // The postal_code where the venue is
 	PostalCode string `json:"venue.address.postal_code"`
-
-	// The country where the venue is
+    // The country where the venue is
 	Country string `json:"venue.address.country"`
-
-	// The latitude of the coordinates for the venue
+    // The latitude of the coordinates for the venue
 	Latitude float64 `json:"venue.address.latitude"`
-
-	// The longitude of the coordinates for the venue
+    // The longitude of the coordinates for the venue
 	Longitude float64 `json:"venue.address.longitude"`
-
-	// The age restrictions for the venue
+    // The age restrictions for the venue
 	AgeRestriction string `json:"venue.age_restriction"`
-
-	// The max capacity for the venue
+    // The max capacity for the venue
 	Capacity int `json:"venue.capacity"`
 }
 
 // https://www.eventbrite.com/developer/v3/endpoints/venues/#ebapi-id3
 type CreateVenueRequest struct {
-
 	// The name of the venue
 	Name string `json:"venue.name" validate:"required"`
-
-	// The organizer this venue belongs to (optional - leave this off to use the default organizer)
+    // The organizer this venue belongs to (optional - leave this off to use the default organizer)
 	OrganizerID string `json:"venue.organizer_id"`
-
-	// The first line of the address
+    // The first line of the address
 	Address1 string `json:"venue.address.address_1"`
-
-	// The second line of the address
+    // The second line of the address
 	Address2 string `json:"venue.address.address_2"`
-
-	// The city where the venue is
+    // The city where the venue is
 	City string `json:"venue.address.city"`
-
-	// The region where the venue is
+    // The region where the venue is
 	Region string `json:"venue.address.region"`
-
-	// The postal_code where the venue is
+    // The postal_code where the venue is
 	PostalCode string `json:"venue.address.postal_code"`
-
-	// The country where the venue is
+    // The country where the venue is
 	Country string `json:"venue.address.country"`
-
-	// The latitude of the coordinates for the venue
+    // The latitude of the coordinates for the venue
 	Latitude float64 `json:"venue.address.latitude"`
-
-	// The longitude of the coordinates for the venue
+    // The longitude of the coordinates for the venue
 	Longitude float64 `json:"venue.address.longitude"`
-
-	// The age restrictions for the venue
+    // The age restrictions for the venue
 	AgeRestriction string `json:"venue.age_restriction"`
-
-	// The max capacity for the venue
+    // The max capacity for the venue
 	Capacity int `json:"venue.capacity"`
 }
 

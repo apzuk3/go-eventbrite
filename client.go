@@ -1,7 +1,6 @@
 package eventbrite
 
 import (
-    "fmt"
     "time"
     "net/http"
     "net/url"
@@ -13,18 +12,14 @@ import (
 
     "golang.org/x/net/context"
     "golang.org/x/net/context/ctxhttp"
+
     "gopkg.in/go-playground/validator.v9"
-    "gopkg.in/go-playground/validator.v8"
 )
 
 var (
-    defaultRequestsPerSecond = 50
+    defaultRequestsPerSecond = 5
     validate = validator.New()
 )
-
-func SetDefaultRequestsPerSecond(cnt int) {
-    defaultRequestsPerSecond = cnt
-}
 
 // Client may be used to make requests to the Eventbrite API
 type Client struct {
@@ -40,9 +35,12 @@ type ClientOption func(*Client) error
 
 // NewClient constructs a new Client which can make requests to the Eventbrite API.
 func NewClient(options ...ClientOption) (*Client, error) {
-    c := &Client{requestsPerSecond: defaultRequestsPerSecond}
+    c := &Client{}
+
+	WithBaseURL("https://www.eventbriteapi.com/v3")(c)
+	WithRateLimit(defaultRequestsPerSecond)(c)
     WithHTTPClient(&http.Client{})(c)
-    WithBaseURL("https://www.eventbriteapi.com/v3")(c)
+
     for _, option := range options {
         err := option(c)
         if err != nil {
@@ -112,16 +110,17 @@ func (c *Client) awaitRateLimiter(ctx context.Context) error {
 }
 
 func (c *Client) get(ctx context.Context, path string, apiReq interface{}) (*http.Response, error) {
-
-    if err := validate.Struct(apiReq); err != nil {
-        return nil, err
-    }
-
     if err := c.awaitRateLimiter(ctx); err != nil {
         return nil, err
     }
 
-    host := path
+    if apiReq != nil {
+		if err := validate.Struct(apiReq); err != nil {
+			return nil, err
+		}
+	}
+
+	host := path
     if c.baseURL != "" {
         host = c.baseURL
     }
@@ -163,9 +162,11 @@ func (c *Client) delete(ctx context.Context, path string) (*http.Response, error
 
 func (c *Client) post(ctx context.Context, path string, apiReq interface{}) (*http.Response, error) {
 
-    if err := validate.Struct(apiReq); err != nil {
-        return nil, err
-    }
+	if apiReq != nil {
+		if err := validate.Struct(apiReq); err != nil {
+			return nil, err
+		}
+	}
 
     if err := c.awaitRateLimiter(ctx); err != nil {
         return nil, err
@@ -215,7 +216,6 @@ func (c *Client) getJSON(ctx context.Context, path string, apiReq interface{}, r
 
     respErr := Error{}
     json.NewDecoder(httpResp.Body).Decode(&respErr)
-    fmt.Printf("%+v", respErr)
     return respErr
 }
 

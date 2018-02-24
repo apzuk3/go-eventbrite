@@ -132,23 +132,23 @@ type EventCreateRequest struct {
     // The name of the event. Value cannot be empty nor whitespace.
     NameHtml string `json:"event.name.html" validate:"required"`
     // The ID of the organizer of this event
-    DescriptionHtml string    `json:"event.description.html" validate:"required"`
+    DescriptionHtml string `json:"event.description.html"`
     // The ID of the organizer of this event
-    OrganizerId string `json:"event.organizer_id" validate:"required"`
+    OrganizerID string `json:"event.organizer_id"`
     // The start time of the event
-    StartUtc string `json:"event.start.utc" validate:"required"`
+    StartUtc DateTime `json:"event.start.utc" validate:"required"`
     // Yes Start time timezone (Olson format)
-    EventStartTimezone string `json:"event.start.timezone" validate:"required"`
+    StartTimezone string `json:"event.start.timezone" validate:"required"`
     // The end time of the event
-    EventEndUtc string `json:"event.end.utc" validate:"required"`
+    EndUtc DateTime `json:"event.end.utc" validate:"required"`
     // End time timezone (Olson format)
-    EventEndTimezone string `json:"event.end.timezone" validate:"required"`
+    EndTimezone string `json:"event.end.timezone" validate:"required"`
     // Whether the start date should be hidden
-    EventHideStartDate bool `json:"event.hide_start_date"`
+    HideStartDate bool `json:"event.hide_start_date"`
     // Whether the end date should be hidden
-    EventHideEndDate bool `json:"event.hide_end_date"`
+    HideEndDate bool `json:"event.hide_end_date"`
     // Event currency (3 letter code)
-    EventCurrency string `json:"event.currency" validate:"required"`
+    Currency string `json:"event.currency" validate:"required"`
     // The ID of a previously-created venue to associate with this event. You can omit this field or
     // set it to null if you set online_event.
     VenueId string `json:"event.venue_id"`
@@ -157,13 +157,13 @@ type EventCreateRequest struct {
     // If the event is publicly listed and searchable. Defaults to True.
     Listed bool `json:"event.listed"`
     // The logo for the event
-    LogoId string `json:"event.logo_id"`
+    LogoID string `json:"event.logo_id"`
     // The category (vertical) of the event
-    CategoryId string `json:"event.category_id"`
+    CategoryID string `json:"event.category_id"`
     // The subcategory of the event (US only)
-    SubcategoryId string `json:"event.subcategory_id"`
+    SubcategoryID string `json:"event.subcategory_id"`
     // The format (general type) of the event
-    FormatId string `json:"event.format_id"`
+    FormatID string `json:"event.format_id"`
     // If users can share the event on social media
     Sharable bool `json:"event.shareable"`
     // Only invited users can see the event page
@@ -193,32 +193,32 @@ type EventUpdateRequest struct {
     // The start time of the event
     StartUtc string `json:"event.start.utc" validate:"required"`
     // Start time timezone (Olson format)
-    EventStartTimezone string `json:"event.start.timezone" validate:"required"`
+    StartTimezone string `json:"event.start.timezone" validate:"required"`
     // The end time of the event
-    EventEndUtc string `json:"event.end.utc" validate:"required"`
+    EndUtc string `json:"event.end.utc" validate:"required"`
     // End time timezone (Olson format)
-    EventEndTimezone string `json:"event.end.timezone" validate:"required"`
+    EndTimezone string `json:"event.end.timezone" validate:"required"`
     // Whether the start date should be hidden
-    EventHideStartDate bool `json:"event.hide_start_date"`
+    HideStartDate bool `json:"event.hide_start_date"`
     // Whether the end date should be hidden
-    EventHideEndDate bool `json:"event.hide_end_date"`
+    HideEndDate bool `json:"event.hide_end_date"`
     // Event currency (3 letter code)
-    EventCurrency string `json:"event.currency" validate:"required"`
+    Currency string `json:"event.currency" validate:"required"`
     // The ID of a previously-created venue to associate with this event. You can omit this field or
     // set it to null if you set online_event.
-    VenueId string `json:"event.venue_id"`
+    VenueID string `json:"event.venue_id"`
     // Is the event online-only (no venue)?
     OnlineEvent bool `json:"event.online_event"`
     // If the event is publicly listed and searchable. Defaults to True.
     Listed bool `json:"event.listed"`
     // The logo for the event
-    LogoId string `json:"event.logo_id"`
+    LogoID string `json:"event.logo_id"`
     // The category (vertical) of the event
-    CategoryId string `json:"event.category_id"`
+    CategoryID string `json:"event.category_id"`
     // The subcategory of the event (US only)
-    SubcategoryId string `json:"event.subcategory_id"`
+    SubcategoryID string `json:"event.subcategory_id"`
     // The format (general type) of the event
-    FormatId string `json:"event.format_id"`
+    FormatID string `json:"event.format_id"`
     // If users can share the event on social media
     Sharable bool `json:"event.shareable"`
     // Only invited users can see the event page

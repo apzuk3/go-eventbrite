@@ -1,5 +1,34 @@
 package eventbrite
 
+import (
+	"context"
+	"fmt"
+)
+
+// User is an object representing an Eventbrite user
+//
+// https://www.eventbrite.com/developer/v3/response_formats/user/#ebapi-std:format-user
+type User struct {
+	ID string `json:"id"`
+	// The user’s name. Use this in preference to first_name/last_name if possible for forward compatibility with non-Western names
+	Name string `json:"name"`
+	// The user’s first name
+	FirstName string `json:"first_name"`
+	// The user’s last name
+	LastName string `json:"last_name"`
+	// A list of user emails
+	Emails []Email `json:"emails"`
+}
+
+// Email contains a list of email objects giving information on the user’s email addresses
+//
+// https://www.eventbrite.com/developer/v3/response_formats/user/#ebapi-user-emails
+type Email struct {
+	Email string `json:"email"`
+	Verified bool `json:"verified"`
+	Primary bool `json:"primary"`
+}
+
 // https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-id1
 type GetUserOrdersRequest struct {
 	// Only return resource changed on or after the time given
@@ -140,7 +169,7 @@ type CreateOrganizationVenueRequest struct {
 }
 
 // https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-id15
-type GetUserOwnedEventAttendees struct {
+type UserEventAttendees struct {
 	// Limits results to either confirmed attendees or cancelled/refunded/etc. attendees
 	// (Valid choices are: attending, or not_attending)
 	Status string `json:"status"`
@@ -148,14 +177,145 @@ type GetUserOwnedEventAttendees struct {
 	ChangedSince string `json:"changed_since"`
 }
 
+// UserEventOrders is the request structure to get all order placed under
+// the user
+//
 // https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-id17
-type GetUserOwnedEventOrders struct {
-	Status string `json:"status"`
-	OnlyEmails []interface{} `json:"only_emails"`
-	ExcludeEmails []interface{} `json:"exclude_emails"`
+type UserEventOrders struct {
+	// Limits results to either past or current & future events / orders.
+	// (Valid choices are: all, past, or current_future)
+	TimeFilter string `json:"time_filter"`
+	// Only return resource changed on or after the time given
 	ChangedSince string `json:"changed_since"`
 }
 
-type GetUserOwnedEventOrdersResult struct {
+// GetUserOrdersResult is the response structure for user orders
+//
+// https://www.eventbrite.co.uk/developer/v3/endpoints/users/#ebapi-get-users-id-orders
+type UserOrdersResult struct {
 	Pagination Pagination `json:"pagination"`
+	Orders []Order `json:"orders"`
 }
+
+// UserOrganizerRequest is the request structure to get all organizer objects that are owned by the user
+//
+// https://www.eventbrite.co.uk/developer/v3/endpoints/users/#ebapi-id3
+type UserOrganizerRequest struct {
+	// True: Will hide organizers flagged as “unsaved” False: Will show organizers
+	// regardless of unsaved flag (Default value)
+	HideUnsaved bool `json:"hide_unsaved"`
+}
+
+// UserOrganizerResponse is the response structure for all organizer objects that are owned by the user
+type UserOrganizerResponse struct {
+	Pagination Pagination `json:"pagination"`
+	Organizers []Organizer `json:"organizers"`
+}
+
+// UserOwnedEventsRequest is the request structure to get user owned events
+//
+// https://www.eventbrite.co.uk/developer/v3/endpoints/users/#ebapi-id5
+type UserOwnedEventsRequest struct {
+	// How to order the results (Valid choices are: start_asc, start_desc, created_asc,
+	// created_desc, name_asc, or name_desc)
+	OrderBy string `json:"order_by"`
+	// True: Will show parent of a serie instead of children False: Will show children of a serie (Default value)
+	ShowSeriesParent bool `json:"show_series_parent"`
+	// Filter by events with a specific status set. This should be a comma delimited string of status.
+	// Valid status: all, draft, live, canceled, started, ended
+	Status string `json:"status"`
+}
+
+// UserOwnedEventResponse is the response structure to get user owned events
+type UserOwnedEventResponse struct {
+	Pagination Pagination `json:"pagination"`
+	Events []Event `json:"events"`
+}
+
+type UserEventsRequest struct {
+
+}
+
+type UserEventsResponse struct {
+	// Filter event results by name
+	NameFilter string `json:"name_filter"`
+	// Filter event results by currency
+	CurrencyFilter string `json:"currency_filter"`
+	// How to order the results (Valid choices are: start_asc, start_desc, created_asc, created_desc, name_asc, or name_desc)
+	OrderBy string `json:"order_by"`
+	// True: Will show parent of a serie instead of children False: Will show children of a serie (Default value)
+	ShowSeriesParent bool `json:"show_series_parent"`
+	// Filter by events with a specific status set. This should be a comma delimited string of
+	// status. Valid status: all, draft, live, canceled, started, ended.
+	Status string `json:"status"`
+	// Filter event results by event_group_id
+	EventGroupID string `json:"event_group_id"`
+	// Number of records in each page.
+	PageSize int `json:"page_size"`
+	// Limits results to either past or current & future events / orders. (Valid choices are: all, past, or current_future)
+	TimeFilter string `json:"time_filter"`
+	// Filter event results by venue IDs
+	VenueFilter []interface{} `json:"venue_filter"`
+}
+
+// UserVenuesResponse is the reponse structure to get user owned venues
+type UserVenuesResponse struct {
+	Pagination Pagination `json:"pagination"`
+	Venues []Venue `json:"venues"`
+}
+
+// UserGet returns a user for the specified user as user. If you want to get details about the
+// currently authenticated user, use /users/me/
+//
+// https://www.eventbrite.co.uk/developer/v3/endpoints/users/#ebapi-get-users-id
+func (c *Client) User(ctx context.Context, id string) (*User, error) {
+	u := new (User)
+
+	return u, c.getJSON(ctx, fmt.Sprintf("/users/%s/", id), nil, u)
+}
+
+// UserOrders returns a paginated response of orders, under the key orders, of all orders
+// the user has placed (i.e. where the user was the person buying the tickets).
+//
+// https://www.eventbrite.co.uk/developer/v3/endpoints/users/#ebapi-get-users-id-orders
+func (c *Client) UserOrders(ctx context.Context, id string, req *UserEventOrders) (*UserOrdersResult, error) {
+	r := new (UserOrdersResult)
+
+	return r, c.getJSON(ctx, fmt.Sprintf("/users/%s/orders/", id), req, r)
+}
+
+// UserOrganizers returns a paginated response of organizer objects that are owned by the user.
+//
+// https://www.eventbrite.co.uk/developer/v3/endpoints/users/#ebapi-get-users-id-organizers
+func (c *Client) UserOrganizers(ctx context.Context, id string, req *UserOrganizerRequest) (*UserOrganizerResponse, error) {
+	r := new (UserOrganizerResponse)
+
+	return r, c.getJSON(ctx, fmt.Sprintf("/users/%s/organizers/", id), req, r)
+}
+
+// UserOrganizers returns a paginated response of organizer objects that are owned by the user.
+//
+// https://www.eventbrite.co.uk/developer/v3/endpoints/users/#ebapi-get-users-id-organizers
+func (c *Client) UserOwnedEvents(ctx context.Context, id string, req *UserOwnedEventsRequest) (*UserOwnedEventResponse, error) {
+	r := new (UserOwnedEventResponse)
+
+	return r, c.getJSON(ctx, fmt.Sprintf("/users/%s/owned_events/", id), req, r)
+}
+
+// UserEvents returns a paginated response of events, under the key events, of all events the user has access to
+//
+// https://www.eventbrite.co.uk/developer/v3/endpoints/users/#ebapi-get-users-id-events
+func (c *Client) UserEvents(ctx context.Context, id string, req UserEventsRequest) (*UserEventsResponse, error) {
+	r := new (UserEventsResponse)
+
+	return r, c.getJSON(ctx, fmt.Sprintf("/users/%s/events/", id), req, r)
+}
+
+// UserVenues returns a paginated response of venue objects that are owned by the user
+func (c *Client) UserVenues(ctx context.Context, id string) (*UserVenuesResponse, error) {
+	r := new (UserVenuesResponse)
+
+	return r, c.getJSON(ctx, fmt.Sprintf("/users/%s/events/", id), nil, r)
+}
+
+

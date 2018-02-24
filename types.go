@@ -333,29 +333,6 @@ type TrackingBeacon struct {
 	Triggers interface{}
 }
 
-// User is an object representing an Eventbrite user
-//
-// https://www.eventbrite.com/developer/v3/response_formats/user/#ebapi-std:format-user
-type User struct {
-	ID string `json:"id"`
-	// The user’s name. Use this in preference to first_name/last_name if possible for forward compatibility with non-Western names
-	Name string `json:"name"`
-	// The user’s first name
-	FirstName string `json:"first_name"`
-	// The user’s last name
-	LastName string `json:"last_name"`
-	// A list of user emails
-	Emails []Email `json:"emails"`
-}
-
-// Contains a list of email objects giving information on the user’s email addresses
-//
-// https://www.eventbrite.com/developer/v3/response_formats/user/#ebapi-user-emails
-type Email struct {
-	Email string `json:"email"`
-	Verified bool `json:"verified"`
-	Primary bool `json:"primary"`
-}
 
 // An object representing a single webhook associated with the account
 type Webhook struct {

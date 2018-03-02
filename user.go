@@ -1,8 +1,8 @@
 package eventbrite
 
 import (
-	"context"
 	"fmt"
+	"golang.org/x/net/context"
 )
 
 // User is an object representing an Eventbrite user
@@ -18,6 +18,28 @@ type User struct {
 	LastName string `json:"last_name"`
 	// A list of user emails
 	Emails []Email `json:"emails"`
+}
+
+type Contact struct {
+	// The contact’s name. Use this in preference to first_name/last_name if possible for
+	// forward compatability with non-Western names
+	Name string `json:"name"`
+	// The contact’s first name
+	FirstName string `json:"first_name"`
+	// The contact’s last name
+	LastName string `json:"last_name"`
+	// The contact’s email address
+	Email string `json:"email"`
+	// When this contact was created
+	Created DateTime `json:"created"`
+}
+
+// https://www.eventbrite.com/developer/v3/response_formats/user/#ebapi-contact-list
+type ContactList struct {
+	// The name of the contact list
+	Name string `json:"name"`
+	// The user who owns this contact list
+	UserID string `json:"user_id"`
 }
 
 // Email contains a list of email objects giving information on the user’s email addresses
@@ -168,13 +190,23 @@ type CreateOrganizationVenueRequest struct {
 	Capacity int `json:"venue.capacity"`
 }
 
+// UserEventAttendeesRequest is the request structure to get a user owned event attendees
+//
 // https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-id15
-type UserEventAttendees struct {
+type UserEventAttendeesRequest struct {
 	// Limits results to either confirmed attendees or cancelled/refunded/etc. attendees
 	// (Valid choices are: attending, or not_attending)
 	Status string `json:"status"`
     // Only return resource changed on or after the time given
 	ChangedSince string `json:"changed_since"`
+}
+
+// UserEventAttendeesResponse is the response structure to get a user owned event attendees
+//
+// https://www.eventbrite.co.uk/developer/v3/endpoints/users/#ebapi-get-users-id-owned-event-attendees
+type UserEventAttendeesResponse struct {
+	Pagination Pagination `json:"pagination"`
+	Attendees []Attendee `json:"attendee"`
 }
 
 // UserEventOrders is the request structure to get all order placed under
@@ -258,11 +290,88 @@ type UserEventsResponse struct {
 	VenueFilter []interface{} `json:"venue_filter"`
 }
 
-// UserVenuesResponse is the reponse structure to get user owned venues
+// UserVenuesResponse is the response structure to get user owned venues
 type UserVenuesResponse struct {
 	Pagination Pagination `json:"pagination"`
 	Venues []Venue `json:"venues"`
 }
+
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-id17
+type UserEventOrdersRequest struct {
+	Status string `json:"status"`
+	OnlyEmails []string `json:"only_emails"`
+	ExcludeEmails []string `json:"exclude_emails"`
+	ChangedSince DateTime `json:"datetime"`
+}
+
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-get-users-id-owned-event-orders
+type UserEventOrdersResponse struct {
+	Pagination Pagination `json:"pagination"`
+	Orders []Order `json:"orders"`
+}
+
+// UserContactListsResponse is the response structure to get user contact lists
+type UserContactListsResponse struct {
+	Pagination Pagination `json:"pagination"`
+	ContactList []ContactList `json:"contact_lists"`
+}
+
+type UserCreateContactListsRequest struct {
+	Name string `json:"contact_list.name" validate:"required"`
+}
+
+type UserUpdateContactListRequest struct {
+	Name string `json:"contact_list.name" validate:"required"`
+}
+
+type UserAddContactListContactRequest struct {
+	// Contact’s email address
+	Email string `json:"email" validate:"required"`
+	// Contact’s first name (or full name)
+	FirstName string `json:"first_name"`
+	// Contact’s last name
+	LastName string `json:"last_name"`
+}
+
+type UserDeleteContactListContactRequest struct {
+	// Email address to remove
+	Email string `json:"email"`
+}
+
+type UserContactListContacts struct {
+	Pagination Pagination `json:"pagination"`
+	Contacts []Contact `json:"contacts"`
+}
+
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-id35
+type UserBookmarksRequest struct {
+	// Optional bookmark list id to fetch all bookmarks from
+	BookmarkListID string `json:"bookmark_list_id"`
+}
+
+type UserBookmarksResponse struct {
+	Pagination Pagination `json:"pagination"`
+	Events []Event `json:"events"`
+}
+
+type UserSaveBookmarkRequest struct {
+	// Event id to bookmark for the user
+	EventID int `json:"event_id"`
+	// Event ids to batch bookmark for the user
+	EventIDs []string `json:"event_ids"`
+	// Optional Bookmark list id to save the bookmark(s) to
+	BookmarkListID string `json:"bookmark_list_id"`
+}
+
+type UserUnSaveBookmarkRequest struct {
+	// Event id to bookmark for the user
+	EventID int `json:"event_id"`
+	// Event ids to batch bookmark for the user
+	EventIDs []string `json:"event_ids"`
+	// Optional Bookmark list id to save the bookmark(s) to
+	BookmarkListID string `json:"bookmark_list_id"`
+}
+
 
 // UserGet returns a user for the specified user as user. If you want to get details about the
 // currently authenticated user, use /users/me/
@@ -316,6 +425,135 @@ func (c *Client) UserVenues(ctx context.Context, id string) (*UserVenuesResponse
 	r := new (UserVenuesResponse)
 
 	return r, c.getJSON(ctx, fmt.Sprintf("/users/%s/events/", id), nil, r)
+}
+
+// UserEventAttendees returns a paginated response of attendees, under the key attendees, of attendees visiting
+// any of the events the user owns (events that would be returned from /users/:id/owned_events/)
+//
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-get-users-id-owned-event-attendees
+func (c *Client) UserEventAttendees(ctx context.Context, id string, request *UserEventAttendeesRequest) (*UserEventAttendeesResponse, error) {
+	r := new (UserEventAttendeesResponse)
+
+	return r, c.getJSON(ctx, fmt.Sprintf("/users/%s/owned_event_attendees/", id), request, r)
+
+}
+
+// UserEventOrders returns a paginated response of orders, under the key orders, of orders placed against any of
+// the events the user owns (events that would be returned from /users/:id/owned_events/)
+//
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-get-users-id-owned-event-orders
+func (c *Client) UserEventOrders(ctx context.Context, id string, request *UserEventOrdersRequest) (*UserEventOrdersResponse, error) {
+	r := new (UserEventOrdersResponse)
+
+	return r, c.getJSON(ctx, fmt.Sprintf("/users/%s/owned_event_orders/", id), request, r)
+
+}
+
+// UserContactLists returns a list of contact_list that the user owns as the key contact_lists
+//
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-get-users-id-contact-lists
+func (c *Client) UserContactLists(ctx context.Context, id string) (*UserContactListsResponse, error) {
+	r := new (UserContactListsResponse)
+
+	return r, c.getJSON(ctx, fmt.Sprintf("/users/%s/contact_lists/", id), nil, r)
+}
+
+// UserCreateContactList makes a new contact_list for the user and returns it as contact_list
+//
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-post-users-id-contact-lists
+func (c *Client) UserCreateContactList(ctx context.Context, id string, request *UserCreateContactListsRequest) (*UserContactListsResponse, error) {
+	r := new (UserContactListsResponse)
+
+	return r, c.postJSON(ctx, fmt.Sprintf("/users/%s/owned_event_orders/", id), request, r)
+}
+
+// UserContactList gets a user’s contact_list by ID as contact_list
+//
+// hhttps://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-get-users-id-contact-lists-contact-list-id
+func (c *Client) UserContactList(ctx context.Context, id, contactListID string, request *UserCreateContactListsRequest) (*UserContactListsResponse, error) {
+	r := new (UserContactListsResponse)
+
+	return r, c.getJSON(ctx, fmt.Sprintf("/users/%s/contact_lists/%s/", id, contactListID), request, r)
+}
+
+
+// UserUpdateContactList updates the contact_list and returns it as contact_list
+//
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-post-users-id-contact-lists-contact-list-id
+func (c *Client) UserUpdateContactList(ctx context.Context, id, contactListID string, request *UserUpdateContactListRequest) (*UserContactListsResponse, error) {
+	r := new (UserContactListsResponse)
+
+	return r, c.postJSON(ctx, fmt.Sprintf("/users/%s/contact_lists/%s/", id, contactListID), request, r)
+}
+
+// UserDeleteContactList deletes the contact list. Returns {"deleted": true}
+//
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-delete-users-id-contact-lists-contact-list-id
+func (c *Client) UserDeleteContactList(ctx context.Context, id, contactListID string) (interface{}, error) {
+	var r interface{}
+
+	return r, c.deleteJSON(ctx, fmt.Sprintf("/users/%s/contact_lists/%s/", id, contactListID), r)
+}
+
+// UserContactListContacts returns the contacts on the contact list as contacts
+//
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-get-users-id-contact-lists-contact-list-id-contacts
+func (c *Client) UserListContactContacts(ctx context.Context, id, contactListID string) (*UserContactListContacts, error) {
+	r := new (UserContactListContacts)
+
+	return r, c.postJSON(ctx, fmt.Sprintf("/users/%s/contact_lists/%s/contacts/", id, contactListID), nil, r)
+}
+
+// UserContactListContacts adds a new contact to the contact list. Returns {"created": true}
+// There is no way to update entries in the list; just delete the old one and add the updated version.
+//
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-get-users-id-contact-lists-contact-list-id-contacts
+func (c *Client) UserListContactAddContacts(ctx context.Context, id, contactListID string, req *UserAddContactListContactRequest) (*UserContactListContacts, error) {
+	r := new (UserContactListContacts)
+
+	return r, c.postJSON(ctx, fmt.Sprintf("/users/%s/contact_lists/%s/contacts/", id, contactListID), req, r)
+}
+
+// UserContactListContacts adds a new contact to the contact list. Returns {"created": true}
+// There is no way to update entries in the list; just delete the old one and add the updated version.
+//
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-get-users-id-contact-lists-contact-list-id-contacts
+func (c *Client) UserListContactDeleteContacts(ctx context.Context, id, contactListID string) (interface{}, error) {
+	r := new (UserContactListContacts)
+
+	return r, c.deleteJSON(ctx, fmt.Sprintf("/users/%s/contact_lists/%s/contacts/", id, contactListID), r)
+}
+
+// UserBookmarks gets all the user’s saved events.
+// In order to update the saved events list, the user must unsave or save each event.
+// A user is authorized to only see his/her saved events.
+//
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-get-users-id-bookmarks
+func (c *Client) UserBookmarks(ctx context.Context, id string, req *UserBookmarksRequest) (*UserBookmarksResponse, error) {
+	r := new (UserBookmarksResponse)
+
+	return r, c.getJSON(ctx, fmt.Sprintf("/users/%s/bookmarks/", id), req, r)
+}
+
+// UserSaveBookmarks adds a new bookmark for the user. Returns {"created": true}.
+// A user is only authorized to save his/her own events.
+//
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-post-users-id-bookmarks-save
+func (c *Client) UserSaveBookmarks(ctx context.Context, id string, req *UserSaveBookmarkRequest) (interface{}, error) {
+	var v interface{}
+
+	return v, c.getJSON(ctx, fmt.Sprintf("/users/%s/bookmarks/save", id), req, v)
+}
+
+
+// UserUnSaveBookmarks removes the specified bookmark from the event for the user. Returns {"deleted": true}.
+// A user is only authorized to unsave his/her own events.
+//
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-post-users-id-bookmarks-unsave
+func (c *Client) UserUnSaveBookmarks(ctx context.Context, id string, req *UserUnSaveBookmarkRequest) (interface{}, error) {
+	var v interface{}
+
+	return v, c.getJSON(ctx, fmt.Sprintf("/users/%s/bookmarks/unsave", id), req, v)
 }
 
 

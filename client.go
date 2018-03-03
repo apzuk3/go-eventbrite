@@ -72,7 +72,7 @@ func WithHTTPClient(c *http.Client) ClientOption {
     }
 }
 
-// WithPersonalToken configures a Eventbrite API client with personal auth token
+// WithPersonalToken configures a Eventbrite API client with auth token
 func WithToken(token string) ClientOption {
     return func(c *Client) error {
         c.token = token

@@ -60,6 +60,16 @@ type GetUserOrdersRequest struct {
 	TimeFilter string `json:"time_filter"`
 }
 
+// An assortment is a package/pricing plan associated with an Eventbrite organizer.
+// This plan determines the features available to the organizer and the pricing model
+// applied to their event tickets.
+//
+// https://www.eventbrite.com/developer/v3/response_formats/assortments/#ebapi-fields
+type Assortment struct {
+	// The assortment plan associated with this user
+	Plan string `json:"plan"`
+}
+
 // https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-id3
 type GetUserOrganizersRequest struct {
 	// 	True: Will hide organizers flagged as “unsaved” False: Will show organizers
@@ -382,6 +392,11 @@ type UserTicketGroupResponse struct {
 	TicketGroups []*TicketGroup
 }
 
+type UserSetAssortmentRequest struct {
+	// The assortments package to upgrade/downgrade to. (Valid choices are: package1, or package2)
+	Plan string `json:"plan" validate:"required"`
+}
+
 // UserGet returns a user for the specified user as user. If you want to get details about the
 // currently authenticated user, use /users/me/
 //
@@ -563,4 +578,22 @@ func (c *Client) UserUnSaveBookmarks(ctx context.Context, id string, req *UserUn
 	var v interface{}
 
 	return v, c.getJSON(ctx, fmt.Sprintf("/users/%s/bookmarks/unsave", id), req, v)
+}
+
+// UserAssortments retrieve the assortment for the user
+//
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-get-users-id-assortment
+func (c *Client) UserAssortments(ctx context.Context, id string) (*Assortment, error) {
+	a := new (Assortment)
+
+	return a, c.getJSON(ctx, fmt.Sprintf("/users/%s/assortment/", id), nil, a)
+}
+
+// UserSetAssortments set a user’s assortment and returns the assortment for the specified user.
+//
+// https://www.eventbrite.com/developer/v3/endpoints/users/#ebapi-get-users-id-assortment
+func (c *Client) UserSetAssortments(ctx context.Context, id string, req *UserSetAssortmentRequest) (*Assortment, error) {
+	a := new (Assortment)
+
+	return a, c.postJSON(ctx, fmt.Sprintf("/users/%s/assortment/", id), req, a)
 }

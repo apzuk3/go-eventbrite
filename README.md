@@ -59,3 +59,16 @@ Whoops, don't forget
     if err != nil {
         // handle me
     }
+    
+    
+
+Contributing
+------------
+
+Feel free to report or pull-request any bug at https://github.com/apzuk/go-eventbrite.
+
+
+License
+-------
+
+The library is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).

@@ -372,6 +372,15 @@ type UserUnSaveBookmarkRequest struct {
 	BookmarkListID string `json:"bookmark_list_id"`
 }
 
+type UserTicketGroupsRequest struct {
+	// 	Limits results to groups with the specific status (Valid choices are: live, archived, deleted, or all)
+	Status string `json:"status"`
+}
+
+type UserTicketGroupResponse struct {
+	Pagination Pagination `json:"pagination"`
+	TicketGroups []*TicketGroup
+}
 
 // UserGet returns a user for the specified user as user. If you want to get details about the
 // currently authenticated user, use /users/me/
@@ -555,5 +564,3 @@ func (c *Client) UserUnSaveBookmarks(ctx context.Context, id string, req *UserUn
 
 	return v, c.getJSON(ctx, fmt.Sprintf("/users/%s/bookmarks/unsave", id), req, v)
 }
-
-

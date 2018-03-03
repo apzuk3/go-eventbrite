@@ -30,7 +30,7 @@ View the [reference documentation](https://www.eventbrite.co.uk/developer/v3/qui
     func main() {
         clnt, _ := eventbrite.NewClient(
             eventbrite.WithToken(YOUR_TOKEN),
-            eventbrite.WithRateLimit(2),
+            eventbrite.WithRateLimit(10),  // max requests rate per second
         )
     
         clnt.UserSetAssortments(context.Background(), "me", &eventbrite.UserSetAssortmentRequest{
@@ -54,4 +54,8 @@ View the [reference documentation](https://www.eventbrite.co.uk/developer/v3/qui
         fmt.Printf("%+v", res)
     }
 
-###Whoops, don't forget error handling!
+Whoops, don't forget 
+    
+    if err != nil {
+        // handle me
+    }

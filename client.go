@@ -37,8 +37,8 @@ type ClientOption func(*Client) error
 func NewClient(options ...ClientOption) (*Client, error) {
     c := &Client{}
 
-	WithBaseURL("https://www.eventbriteapi.com/v3")(c)
-	WithRateLimit(defaultRequestsPerSecond)(c)
+    WithBaseURL("https://www.eventbriteapi.com/v3")(c)
+    WithRateLimit(defaultRequestsPerSecond)(c)
     WithHTTPClient(&http.Client{})(c)
 
     for _, option := range options {
@@ -115,12 +115,12 @@ func (c *Client) get(ctx context.Context, path string, apiReq interface{}) (*htt
     }
 
     if apiReq != nil {
-		if err := validate.Struct(apiReq); err != nil {
-			return nil, err
-		}
-	}
+        if err := validate.Struct(apiReq); err != nil {
+            return nil, err
+        }
+    }
 
-	host := path
+    host := path
     if c.baseURL != "" {
         host = c.baseURL
     }
@@ -162,11 +162,11 @@ func (c *Client) delete(ctx context.Context, path string) (*http.Response, error
 
 func (c *Client) post(ctx context.Context, path string, apiReq interface{}) (*http.Response, error) {
 
-	if apiReq != nil {
-		if err := validate.Struct(apiReq); err != nil {
-			return nil, err
-		}
-	}
+    if apiReq != nil {
+        if err := validate.Struct(apiReq); err != nil {
+            return nil, err
+        }
+    }
 
     if err := c.awaitRateLimiter(ctx); err != nil {
         return nil, err

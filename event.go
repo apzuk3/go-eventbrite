@@ -413,7 +413,7 @@ type EventCreateCannedQuestion struct {
 //
 // https://www.eventbrite.com/developer/v3/endpoints/events/#ebapi-id35
 type EventGetQuestions struct {
-	// Return private events and more details
+    // Return private events and more details
     AsOwner bool `json:"as_owner"`
 }
 

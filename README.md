@@ -1,6 +1,7 @@
 # Go client for Eventbrite
 
 [![GoDoc](https://godoc.org/apzuk/go-eventbrite?status.svg)](https://godoc.org/github.com/apzuk/go-eventbrite)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Installation
 

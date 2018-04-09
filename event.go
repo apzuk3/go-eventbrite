@@ -504,8 +504,9 @@ type EventGetTicketGroupsTicketClasses struct {
 //
 // https://www.eventbrite.com/developer/v3/endpoints/events/#ebapi-events
 type EventSearchResult struct {
-	Pagination Pagination `json:"pagination"`
-	Events     []Event    `json:"events"`
+	Pagination     Pagination `json:"pagination"`
+	Events         []Event    `json:"events"`
+	TopMatchEvents []Event    `json:"top_match_events"`
 }
 
 // EventGetTicketClassResult is the response structure for an Event TicketClass

@@ -162,7 +162,7 @@ type Venue struct {
 	// The value name
 	Name string `json:"name"`
 	// The address of the venue
-	Address Address `json:"name"`
+	Address Address `json:"address"`
 }
 
 // Though address formatting varies considerably between different countries and regions, Eventbrite

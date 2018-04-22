@@ -218,7 +218,7 @@ type Category struct {
 	// The category name localized to the current locale (if available)
 	NameLocalized string `json:"name_localized"`
 	// A shorter name for display in sidebars and other small spaces.
-	ShortName string `json:"sort_name"`
+	ShortName string `json:"short_name"`
 	// List of subcategories, only shown on some endpoints.
 	ShortNameLocalized string `json:"short_name_localized"`
 	SubCategories      []SubCategory

@@ -198,7 +198,7 @@ func (c *Client) post(ctx context.Context, path string, apiReq interface{}) (*ht
 func (c *Client) generateAuthQuery(path string, q url.Values) (string, error) {
 	if c.token != "" {
 		q.Set("token", c.token)
-		q.Set("expand", "venue")
+		q.Set("expand", "venue,category,subcategories")
 		return q.Encode(), nil
 	}
 	return "", errors.New("eventbrite: Token missing")

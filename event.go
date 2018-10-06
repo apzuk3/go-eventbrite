@@ -119,6 +119,8 @@ type EventSearchRequest struct {
 	IncludeAllSeriesInstances bool `json:"include_all_series_instances"`
 	// Boolean for whether or not you want to see events without tickets on sale.
 	IncludeUnavailableEvents bool `json:"include_unavailable_events"`
+	// Boolean for whether or not you want to see adult events
+	IncludeAdultEvents bool `json:"include_adult_events"`
 	// Incorporate additional information from the user’s historic preferences.
 	IncorporateUserAffinities bool `json:"incorporate_user_affinities"`
 	// Make search results prefer events in these categories. This should be a comma delimited string of category IDs.

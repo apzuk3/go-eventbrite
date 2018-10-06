@@ -678,7 +678,7 @@ func (c *Client) EventDeleteTicketClass(ctx context.Context, eventId, ticketId s
 func (c *Client) EventGetCannedQuestions(ctx context.Context, id string, q *EventGetCannedQuestions) (interface{}, error) {
 	var result interface{}
 
-	return result, c.getJSON(ctx, fmt.Sprintf("/events/%d/canned_questions/", id), q, result)
+	return result, c.getJSON(ctx, fmt.Sprintf("/events/%s/canned_questions/", id), q, result)
 }
 
 // EventCreateCannedQuestion creates a new canned question; returns the result as a question
@@ -687,7 +687,7 @@ func (c *Client) EventGetCannedQuestions(ctx context.Context, id string, q *Even
 func (c *Client) EventCreateCannedQuestion(ctx context.Context, id string, q *EventCreateCannedQuestion) (interface{}, error) {
 	var result interface{}
 
-	return result, c.postJSON(ctx, fmt.Sprintf("/events/%d/canned_questions/", id), q, result)
+	return result, c.postJSON(ctx, fmt.Sprintf("/events/%s/canned_questions/", id), q, result)
 }
 
 // Eventbrite allows event organizers to add custom questions that attendees fill out upon registration.

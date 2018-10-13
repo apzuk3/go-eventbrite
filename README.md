@@ -1,6 +1,6 @@
 # Go client for Eventbrite
 
-[![GoDoc](https://godoc.org/apzuk/go-eventbrite?status.svg)](https://godoc.org/github.com/apzuk/go-eventbrite)
+[![GoDoc](https://godoc.org/apzuk3/go-eventbrite?status.svg)](https://godoc.org/github.com/apzuk3/go-eventbrite)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Installation
@@ -8,7 +8,7 @@
 To install the Go Client for Eventbrite API, please execute the following `go get` command.
 
 ```bash
-go get github.com/apzuk/go-eventbrite
+go get github.com/apzuk3/go-eventbrite
 ```
 
 ## Developer Documentation
@@ -23,7 +23,7 @@ View the [reference documentation](https://www.eventbrite.co.uk/developer/v3/qui
         "fmt"
         "time"
     
-        "github.com/apzuk/go-eventbrite"
+        "github.com/apzuk3/go-eventbrite"
     
         "golang.org/x/net/context"
     )

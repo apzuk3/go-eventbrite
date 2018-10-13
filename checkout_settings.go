@@ -182,7 +182,7 @@ func (c *Client) CheckoutCreate(ctx context.Context, req *CheckoutCreateRequest)
 func (c *Client) CheckoutGet(ctx context.Context, id string) (*Checkout, error) {
 	s := new(Checkout)
 
-	return s, c.getJSON(ctx, fmt.Sprintf("/checkout_settings/%d/", id), nil, s)
+	return s, c.getJSON(ctx, fmt.Sprintf("/checkout_settings/%s/", id), nil, s)
 }
 
 // CheckoutByEvent gets and returns a list of checkout_settings associated with a given event by its event_id
